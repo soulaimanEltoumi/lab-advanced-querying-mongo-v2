@@ -9,6 +9,7 @@
 <!-- Your Query Goes Here -->
 
 query: {name: "Babelgum"}
+Projection: {name: 1, \_id: 0}
 
 <br>
 
@@ -35,12 +36,14 @@ project: {name: 1, founded_year: 1}
 <!-- Your Query Goes Here -->
 
 <br>
-query: { "ipo.valuation_amount": { "$gt": 100000000 }, "founded_year": { "$lt": 2010 } }
+query: { "ipo.valuation_amount": { "$gte": 100000000 }, "founded_year": { "$lt": 2010 } }
 project: {name: 1, ipo: 1}
 
 **5. All the companies that don't include the `partners` field.**
 
 <!-- Your Query Goes Here -->
+
+query: {partners: {$exists: false}}
 
 <br>
 
@@ -48,11 +51,14 @@ project: {name: 1, ipo: 1}
 
 <!-- Your Query Goes Here -->
 
+query:{category_code: {$type: "null"}}
 <br>
 
 **7. Order all the companies by their IPO price in a descending order.**
 
 <!-- Your Query Goes Here -->
+
+sort:{"ipo.valuation_amount": -1}
 
 <br>
 
@@ -60,17 +66,27 @@ project: {name: 1, ipo: 1}
 
 <!-- Your Query Goes Here -->
 
+sort:{"number_of_employees": -1}
+limit: 10
+
 <br>
 
 **9. All the companies founded on the second semester of the year (July to December). Limit your search to 1000 companies.**
 
 <!-- Your Query Goes Here -->
 
+query: { "founded_month": { "$gt": 6 } }
+limit: 1000
+
 <br>
 
 **10. All the companies that have been founded on the first seven days of the month, including the seventh. Sort them by their `acquisition price` in a descending order. Limit the search to 10 documents.**
 
 <!-- Your Query Goes Here -->
+
+query: { founded_day: { "$lte": 7 } }
+sort: {"acquisitions.price_amount": -1}
+limit: 10
 
 <br>
 
@@ -80,11 +96,18 @@ project: {name: 1, ipo: 1}
 
 <!-- Your Query Goes Here -->
 
+query: { "acquisitions.price_amount": { "$gt": 2010 } }
+projection: { name: 1, acquisitions: 1 }
+sort: {"acquisitions.price_amount": -1}
+
 <br>
 
 **2. Order the companies by their `founded year`, retrieving only their `name` and `founded year`.**
 
 <!-- Your Query Goes Here -->
+
+projection: { name: 1, founded_year: 1 }
+sort: {"founded_year": 1}
 
 <br>
 
@@ -92,16 +115,23 @@ project: {name: 1, ipo: 1}
 
 <!-- Your Query Goes Here -->
 
+query: { category: "web", number_of_employees: { "$gt": 4000}}
+sort: {"number_of_employees": 1}
+
 <br>
 
 **4. All the companies whose acquisition amount is more than 10.000.000, and currency is 'EUR'.**
 
 <!-- Your Query Goes Here -->
 
+query: { "acquisitions.price_amount": { "$gt": 10000000 }, "acquisitions.price_currency": "EUR" }
+
 <br>
 
 **5. All the companies that have been founded between 2000 and 2010, but have not been acquired before 2011.**
 
 <!-- Your Query Goes Here -->
+
+query: { founded_year: { "$gte": 2000, "$lte": 2010}}
 
 <br>
